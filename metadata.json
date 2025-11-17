@@ -1,0 +1,5 @@
+{
+  "name": "Nono - Noor Gymnastics Academy AI Assistant",
+  "description": "Nono, an intelligent chatbot for Noor Gymnastics Academy. It uses a predefined knowledge base to answer customer inquiries about classes, schedules, costs, and more, all in Arabic.",
+  "requestFramePermissions": []
+}
