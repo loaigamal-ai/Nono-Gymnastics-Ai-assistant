@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Nono Ai Assistant</title>
+<style>
+body {
+  background:#f4f4f4;
+  font-family: 'Tahoma', sans-serif;
+}
+#chatbox {
+  width: 80%;
+  margin: 40px auto;
+  background: white;
+  padding: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 15px #ddd;
+}
+.message {
+  padding: 10px 15px;
+  margin: 10px 0;
+  border-radius: 10px;
+  max-width: 80%;
+}
+.user {
+  background: #d1e7ff;
+  margin-left: auto;
+}
+.bot {
+  background: #eee;
+  margin-right: auto;
+}
+#inputArea {
+  display: flex;
+  margin-top: 15px;
+}
+input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+button {
+  padding: 12px 18px;
+  margin-right: 10px;
+  border: none;
+  background: purple;
+  color: white;
+  border-radius: 10px;
+  cursor: pointer;
+}
+</style>
+</head>
+<body>
+
+<div id="chatbox">
+  <h2 style="text-align:center; color:purple;">🤖 مساعد أكاديمية نور للجمباز</h2>
+  <div id="messages"></div>
+
+  <div id="inputArea">
+    <input type="text" id="userInput" placeholder="اكتب سؤالك هنا...">
+    <button onclick="sendMessage()">إرسال</button>
+  </div>
+</div>
+
+<script>
+const API_KEY = AIzaSyCENKrIphUGJX_gA7XgcqqInVc_ZhkA3TY; 
+
+async function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if (!text) return;
+
+  addMessage(text, "user");
+  input.value = "";
+
+  const response = await callAI(text);
+  addMessage(response, "bot");
+}
+
+function addMessage(text, sender) {
+  const msg = document.createElement("div");
+  msg.className = "message " + sender;
+  msg.textContent = text;
+  document.getElementById("messages").appendChild(msg);
+}
+
+async function callAI(prompt) {
+  const res = await fetch("https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + API_KEY, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      contents: [{ parts: [{ text: prompt }] }]
+    })
+  });
+
+  const data = await res.json();
+  return data.candidates?.[0]?.content?.parts?.[0]?.text || "حصل خطأ، حاول مرة تانية 🙏";
+}
+</script>
+
+</body>
+</html>
