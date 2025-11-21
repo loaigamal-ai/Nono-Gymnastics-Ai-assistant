@@ -1,6 +1,6 @@
 import path from 'path';
 import { defineConfig, loadEnv } from 'vite';
-import react from 'Nono-Gymnastics-Ai-assistant';
+import react from '@vitejs/plugin-react'; // ⬅️ صححت الاستيراد
 
 export default defineConfig(({ mode }) => {
     const env = loadEnv(mode, '.', '');
@@ -10,6 +10,7 @@ export default defineConfig(({ mode }) => {
         host: '0.0.0.0',
       },
       plugins: [react()],
+      base: "/Nono-Gymnastics-Ai-assistant/", // ⬅️ السطر المضاف
       define: {
         'process.env.API_KEY': JSON.stringify(env.GEMINI_API_KEY),
         'process.env.GEMINI_API_KEY': JSON.stringify(env.GEMINI_API_KEY)
