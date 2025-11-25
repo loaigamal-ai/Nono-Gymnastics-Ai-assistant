@@ -7,10 +7,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
     <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: system-ui, -apple-system, sans-serif; }
-    </style>
 </head>
 <body class="bg-gray-100">
     <div id="root"></div>
@@ -20,12 +16,11 @@
         
         const App = () => {
             const [messages, setMessages] = useState([
-                { id: 1, text: 'أهلاً بك! أنا نونو مساعد أكاديمية نور للجمباز. اسألني عن أي شيء!', type: 'bot' }
+                { id: 1, text: 'أهلاً بك! أنا نونو مساعد أكاديمية نور للجمباز. اسألني عن الأسعار، المواعيد، العنوان، أو الأعمار.', type: 'bot' }
             ]);
             const [input, setInput] = useState('');
             const [isLoading, setIsLoading] = useState(false);
             
-            // دالة البحث في knowledge.txt
             const findAnswerInKnowledge = (question, knowledgeText) => {
                 question = question.toLowerCase();
                 const lines = knowledgeText.split('\n');
@@ -39,21 +34,18 @@
                     }
                 }
                 
-                return "عذراً، لم أجد إجابة في قاعدة المعرفة. جرب السؤال عن: الأسعار، المواعيد، العنوان.";
+                return "عذراً، لم أجد إجابة في قاعدة المعرفة.";
             };
 
             const handleSubmit = (e) => {
                 e.preventDefault();
                 if (!input.trim()) return;
                 
-                // إضافة رسالة المستخدم
                 setMessages(prev => [...prev, { id: Date.now(), text: input, type: 'user' }]);
-                
                 const currentInput = input;
                 setInput('');
                 setIsLoading(true);
 
-                // البحث في knowledge.txt
                 fetch('./knowledge.txt')
                     .then(response => response.text())
                     .then(knowledgeText => {
@@ -108,13 +100,13 @@
                                     value: input,
                                     onChange: (e) => setInput(e.target.value),
                                     placeholder: 'اكتب سؤالك هنا...',
-                                    className: 'flex-1 p-3 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-purple-500'
+                                    className: 'flex-1 p-3 border border-gray-300 rounded-full'
                                 }),
                                 React.createElement('button', {
                                     key: 'button',
                                     type: 'submit',
                                     disabled: isLoading,
-                                    className: 'bg-purple-600 text-white px-6 py-3 rounded-full hover:bg-purple-700 disabled:bg-gray-400'
+                                    className: 'bg-purple-600 text-white px-6 py-3 rounded-full'
                                 }, 'إرسال')
                             ]
                         )
