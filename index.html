@@ -236,9 +236,7 @@ function searchKnowledge(userText) {
   return top >= 3 ? best.a : null;
 }
 
-/* ── STAGE 2: Gemini AI ── */
-const GEMINI_API_KEY = "AIzaSyCENKrIphUGX_bA7XgcqqInVc_ZhkA3TY"; // 🔑 ضع مفتاحك هنا
-
+/* ── STAGE 2: Gemini AI (via Vercel proxy) ── */
 async function askGemini(userMsg) {
   const knowledgeBlock = KNOWLEDGE.map((k,i) =>
     `[${i+1}] سؤال: ${k.q}\nجواب: ${k.a}`
@@ -258,27 +256,22 @@ ${knowledgeBlock}
 5. إذا لم تجد إجابة لسؤال خاص بالأكاديمية → أرجع النص التالي فقط بدون أي إضافة: ##TRANSFER##
 6. كن مختصراً: جملتين أو ثلاثة كحد أقصى إلا عند تعداد نقاط.`;
 
-  // دمج الـ system prompt مع السؤال في رسالة واحدة (Gemini لا يدعم system prompt منفصل في REST)
   const fullPrompt = systemPrompt + "\n\nسؤال المستخدم: " + userMsg;
 
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${GEMINI_API_KEY}`,
-    {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "x-goog-api-key": GEMINI_API_KEY
-      },
-      body: JSON.stringify({
-        contents: [{ parts: [{ text: fullPrompt }] }],
-        generationConfig: { maxOutputTokens: 500, temperature: 0.7 }
-      })
-    }
-  );
+  // الطلب بيروح لـ Vercel proxy اللي بيبعته لـ Gemini بأمان
+  const res = await fetch("/api/chat", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ prompt: fullPrompt })
+  });
 
-  if (!res.ok) throw new Error("Gemini error " + res.status);
+  if (!res.ok) {
+    const errData = await res.json().catch(() => ({}));
+    console.error("Proxy error:", errData);
+    throw new Error("API error " + res.status);
+  }
   const data = await res.json();
-  return data.candidates?.[0]?.content?.parts?.[0]?.text || "##TRANSFER##";
+  return data.text || "##TRANSFER##";
 }
 
 /* ── DOM HELPERS ── */
@@ -385,6 +378,9 @@ window.addEventListener("load", () => {
   addMsg("أهلاً وسهلاً! أنا <strong>نونو</strong>، مساعدك في أكاديمية نور للجمباز الفني 🤸‍♀️<br><br>أقدر أجاوبك على أي سؤال عن الأكاديمية، الاشتراكات، المواعيد، أو الجمباز بشكل عام.<br><br>قولي إزاي أقدر أساعدك؟ 💖");
   inputEl.focus();
 });
+</script>
+</body>
+</html>
 </script>
 </body>
 </html>
