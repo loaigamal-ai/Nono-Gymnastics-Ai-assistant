@@ -3,6 +3,3 @@
     { "source": "/api/chat", "destination": "/api/chat.js" }
   ]
 }
-    return res.status(500).json({ error: 'Internal server error' });
-  }
-}
