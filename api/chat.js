@@ -5,12 +5,12 @@ export default async function handler(req, res) {
 
   if (req.method === 'OPTIONS') return res.status(200).end();
   
-  // الحل النهائي: نضع المفتاح كنص صريح بين علامتي تنصيص
-  // استبدل السطر القادم بمفتاحك الحقيقي وتأكد من وجود الـ ""
+  // ضع مفتاحك هنا
   const apiKey = "AIzaSyDX6BOjfQ9Njd83qKjIb8GMycEWuG-Q04U"; 
 
-  if (!apiKey || apiKey.includes("AIzaSyDX6BOjfQ9Njd83qKjIb8GMycEWuG-Q04U")) {
-    return res.status(500).json({ error: "API Key is not set correctly in the code" });
+  // التصحيح: نكتفي بالتأكد من وجود المفتاح فقط
+  if (!apiKey) {
+    return res.status(500).json({ error: "API Key is missing" });
   }
 
   const { prompt } = req.body || {};
