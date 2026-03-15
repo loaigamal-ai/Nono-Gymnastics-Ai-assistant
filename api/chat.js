@@ -8,7 +8,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   
   // مفتاح الـ API الخاص بك (تذكر إنشاء مفتاح جديد وحذف هذا لاحقاً لأسباب أمنية)
-  const apiKey = "AIzaSyDX6BOjfQ9Njd83qKjIb8GMycEWuG-Q04U"; 
+  const apiKey = "AIzaSyDeQH9fL7hFEB-aKPkrskJUqBXST7JuYlw"; 
 
   // التأكد من وجود المفتاح فقط دون شروط معقدة
   if (!apiKey) {
